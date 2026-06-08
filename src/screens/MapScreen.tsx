@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   Pressable,
   Modal,
   Dimensions,
@@ -13,6 +12,9 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useAppTheme } from '../theme/ThemeContext';
 import { sampleCampuses, sampleBusStops } from '../data/sampleData';
 import { CampusLocation, BusStop } from '../types';
+import { commonStyles } from '../theme/commonStyles';
+import { styles } from '../styles/MapScreen.styles';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const MapScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const { theme, isDark } = useAppTheme();
@@ -192,14 +194,19 @@ const MapScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   `;
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <SafeAreaView style={commonStyles.container} edges={['top']}>
       {/* AppBar */}
-      <View style={[styles.appBar, { backgroundColor: colors.appbar }]}>
-        <View style={styles.appBarLeft}>
-          <Pressable style={styles.appBarIcon} onPress={() => navigation.openDrawer()}>
+      <LinearGradient
+        colors={colors.appbarGradient}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        style={[commonStyles.appBar, { justifyContent: 'space-between' }]}
+      >
+        <View style={commonStyles.appBarLeft}>
+          <Pressable style={commonStyles.appBarIcon} onPress={() => navigation.openDrawer()}>
             <MaterialIcons name="menu" size={26} color="#FFFFFF" />
           </Pressable>
-          <Text style={styles.appBarTitle}>Harita</Text>
+          <Text style={commonStyles.appBarTitle}>Harita</Text>
         </View>
         <View style={styles.appBarRight}>
           <Pressable 
@@ -217,7 +224,7 @@ const MapScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
             <MaterialIcons name="my-location" size={22} color="#FFFFFF" />
           </Pressable>
         </View>
-      </View>
+      </LinearGradient>
 
       {/* Map View Container */}
       <View style={styles.mapContainer}>
@@ -355,189 +362,4 @@ const MapScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  appBar: {
-    height: 56,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 2.5,
-  },
-  appBarLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  appBarIcon: {
-    padding: 4,
-    marginRight: 12,
-  },
-  appBarTitle: {
-    color: '#FFFFFF',
-    fontSize: 19,
-    fontWeight: 'bold',
-  },
-  appBarRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  appBarActionIcon: {
-    padding: 6,
-    marginLeft: 10,
-  },
-  mapContainer: {
-    flex: 1,
-    position: 'relative',
-  },
-  map: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  filtersOverlay: {
-    position: 'absolute',
-    left: 12,
-    top: 12,
-    flexDirection: 'row',
-    padding: 4,
-    borderRadius: 12,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.15,
-    shadowRadius: 1.5,
-  },
-  filterChip: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 8,
-    marginHorizontal: 3,
-  },
-  filterChipText: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    marginLeft: 6,
-  },
-  legendOverlay: {
-    position: 'absolute',
-    left: 12,
-    bottom: 12,
-    padding: 8,
-    borderRadius: 12,
-    borderWidth: 1,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.15,
-    shadowRadius: 1.5,
-  },
-  legendRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  legendDot: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  legendText: {
-    fontSize: 11,
-    fontWeight: '500',
-    marginLeft: 6,
-  },
-  modalBackdrop: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    justifyContent: 'flex-end',
-  },
-  sheetContent: {
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    paddingHorizontal: 20,
-    paddingBottom: 28,
-    paddingTop: 8,
-  },
-  sheetHandle: {
-    width: 36,
-    height: 4,
-    backgroundColor: '#CCCCCC',
-    borderRadius: 2,
-    alignSelf: 'center',
-    marginBottom: 16,
-  },
-  sheetRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  sheetTitle: {
-    fontSize: 17,
-    fontWeight: 'bold',
-    marginLeft: 10,
-    flex: 1,
-  },
-  sheetInfo: {
-    fontSize: 14,
-  },
-  linesTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  linesContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginTop: 6,
-  },
-  lineChip: {
-    backgroundColor: '#FFE0B2',
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    marginRight: 8,
-    marginVertical: 4,
-  },
-  lineChipText: {
-    color: '#E65100',
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  sheetButton: {
-    backgroundColor: '#E65100',
-    height: 44,
-    borderRadius: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 18,
-  },
-  buttonIcon: {
-    marginRight: 6,
-  },
-  sheetButtonText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-  sheetTipText: {
-    color: '#999999',
-    fontSize: 11,
-    marginTop: 8,
-    textAlign: 'center',
-    lineHeight: 14,
-  },
-});
-
 export default MapScreen;

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   FlatList,
   Pressable,
   ActivityIndicator,
@@ -17,6 +16,9 @@ import { useAppTheme } from '../theme/ThemeContext';
 import ApiService from '../services/apiService';
 import { sampleCalendar, sampleEvents } from '../data/sampleData';
 import { ApiEvent, CalendarItem } from '../types';
+import { commonStyles } from '../theme/commonStyles';
+import { styles } from '../styles/EventsScreen.styles';
+import { LinearGradient } from 'expo-linear-gradient';
 
 interface EventsScreenProps {
   navigation: any;
@@ -120,7 +122,7 @@ const EventsScreen: React.FC<EventsScreenProps> = ({ navigation }) => {
   };
 
   const renderEventCard = ({ item }: { item: ApiEvent }) => (
-    <Pressable style={[styles.card, { backgroundColor: colors.card }]} onPress={() => setSelectedEvent(item)}>
+    <Pressable style={[commonStyles.card, { backgroundColor: colors.card }]} onPress={() => setSelectedEvent(item)}>
       {item.imageUrl && (
         <Image source={{ uri: item.imageUrl }} style={styles.cardImage} />
       )}
@@ -229,22 +231,27 @@ const EventsScreen: React.FC<EventsScreenProps> = ({ navigation }) => {
   );
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
+    <SafeAreaView style={[commonStyles.container, { backgroundColor: colors.background }]} edges={['top']}>
       {/* AppBar */}
-      <View style={[styles.appBar, { backgroundColor: colors.appbar }]}>
-        <View style={styles.appBarLeft}>
-          <Pressable style={styles.appBarIcon} onPress={() => navigation.openDrawer()}>
+      <LinearGradient
+        colors={colors.appbarGradient}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        style={commonStyles.appBar}
+      >
+        <View style={commonStyles.appBarLeft}>
+          <Pressable style={commonStyles.appBarIcon} onPress={() => navigation.openDrawer()}>
             <MaterialIcons name="menu" size={26} color="#FFFFFF" />
           </Pressable>
-          <Text style={styles.appBarTitle}>Etkinlik & Takvim</Text>
+          <Text style={commonStyles.appBarTitle}>Etkinlik & Takvim</Text>
         </View>
-      </View>
+      </LinearGradient>
 
       {renderHeader()}
 
       {activeTab === 'events' ? (
         loading ? (
-          <View style={styles.loadingContainer}>
+          <View style={commonStyles.loadingContainer}>
             <ActivityIndicator size="large" color={colors.primary} />
           </View>
         ) : (
@@ -355,261 +362,4 @@ const EventsScreen: React.FC<EventsScreenProps> = ({ navigation }) => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  appBar: {
-    height: 56,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 2.5,
-  },
-  appBarLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  appBarIcon: {
-    padding: 4,
-    marginRight: 12,
-  },
-  appBarTitle: {
-    color: '#FFFFFF',
-    fontSize: 19,
-    fontWeight: 'bold',
-  },
-  tabContainer: {
-    flexDirection: 'row',
-    height: 48,
-    backgroundColor: '#FFFFFF',
-    elevation: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 1,
-  },
-  tabButton: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  tabButtonText: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    marginLeft: 6,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  listContent: {
-    padding: 12,
-  },
-  offlineNotice: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(230, 81, 0, 0.08)',
-    padding: 12,
-    borderRadius: 12,
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: 'rgba(230, 81, 0, 0.2)',
-  },
-  offlineText: {
-    fontSize: 12,
-    color: '#E65100',
-    marginLeft: 10,
-    flex: 1,
-  },
-  card: {
-    borderRadius: 16,
-    marginVertical: 6,
-    overflow: 'hidden',
-    elevation: 1.5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 0.5 },
-    shadowOpacity: 0.1,
-    shadowRadius: 1.5,
-  },
-  cardImage: {
-    width: '100%',
-    height: 160,
-    resizeMode: 'cover',
-  },
-  cardContent: {
-    padding: 12,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-  },
-  dateBadgeContainer: {
-    marginRight: 12,
-  },
-  dateBadge: {
-    width: 54,
-    height: 60,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 1,
-  },
-  dateBadgeDay: {
-    color: '#FFFFFF',
-    fontSize: 22,
-    fontWeight: 'bold',
-  },
-  dateBadgeMonth: {
-    color: 'rgba(255,255,255,0.85)',
-    fontSize: 11,
-    fontWeight: '600',
-  },
-  textDetails: {
-    flex: 1,
-  },
-  chip: {
-    alignSelf: 'flex-start',
-    borderRadius: 8,
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    marginBottom: 6,
-  },
-  chipText: {
-    fontSize: 11,
-    fontWeight: 'bold',
-  },
-  cardTitle: {
-    fontSize: 15,
-    fontWeight: 'bold',
-    lineHeight: 20,
-    marginBottom: 6,
-  },
-  iconRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 2,
-  },
-  iconRowText: {
-    fontSize: 12,
-    marginLeft: 6,
-    flex: 1,
-  },
-  calendarCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 4,
-    padding: 14,
-    borderRadius: 16,
-    elevation: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 0.5 },
-    shadowOpacity: 0.08,
-    shadowRadius: 1,
-  },
-  calendarAvatar: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 14,
-  },
-  calendarTextContainer: {
-    flex: 1,
-  },
-  calendarTitle: {
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-  calendarSubtitle: {
-    fontSize: 12,
-    marginTop: 4,
-  },
-  // Modal styles
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'flex-end',
-  },
-  modalContent: {
-    height: '80%',
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    overflow: 'hidden',
-  },
-  modalHeader: {
-    height: 56,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-  },
-  modalHeaderTitle: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: 'bold',
-    flex: 1,
-  },
-  modalCloseButton: {
-    padding: 4,
-  },
-  modalImage: {
-    width: '100%',
-    height: 200,
-    resizeMode: 'cover',
-  },
-  modalPadding: {
-    padding: 20,
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    lineHeight: 26,
-    marginVertical: 6,
-  },
-  modalDivider: {
-    height: 1,
-    marginVertical: 14,
-  },
-  modalInfoRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 8,
-  },
-  modalInfoTextContainer: {
-    marginLeft: 14,
-    flex: 1,
-  },
-  modalInfoLabel: {
-    fontSize: 11,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  modalInfoValue: {
-    fontSize: 14,
-    fontWeight: '600',
-    marginTop: 2,
-  },
-  descriptionContainer: {
-    marginTop: 18,
-  },
-  descriptionHeader: {
-    fontSize: 15,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  descriptionBody: {
-    fontSize: 14,
-    lineHeight: 22,
-  },
-});
-
 export default EventsScreen;

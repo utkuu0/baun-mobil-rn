@@ -3,6 +3,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { useAppTheme } from '../theme/ThemeContext';
 import AppDrawer from '../widgets/AppDrawer';
 import BottomTabNavigator from './BottomTabNavigator';
+import { LinearGradient } from 'expo-linear-gradient';
 
 // Import Screens (we will create them next)
 import YemekScreen from '../screens/YemekScreen';
@@ -28,8 +29,15 @@ const DrawerNavigator: React.FC = () => {
     <Drawer.Navigator
       drawerContent={(props) => <AppDrawer {...props} />}
       screenOptions={{
+        headerBackground: () => (
+          <LinearGradient
+            colors={colors.appbarGradient}
+            style={{ flex: 1 }}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+          />
+        ),
         headerStyle: {
-          backgroundColor: colors.appbar,
           elevation: 0, // Android shadow
           shadowOpacity: 0, // iOS shadow
         },

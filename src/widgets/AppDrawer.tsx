@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAppTheme } from '../theme/ThemeContext';
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const AppDrawer: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
   const { isDark, theme, toggleTheme } = useAppTheme();
@@ -31,7 +32,12 @@ const AppDrawer: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top', 'bottom']}>
       {/* Header */}
-      <View style={[styles.header, { backgroundColor: colors.secondary }]}>
+      <LinearGradient
+        colors={colors.appbarGradient}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        style={styles.header}
+      >
         <View style={styles.logoContainer}>
           <Image source={require('../../assets/logo.png')} style={styles.logo} />
         </View>
@@ -39,7 +45,7 @@ const AppDrawer: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
           <Text style={styles.headerTitle}>BAÜN Mobil</Text>
           <Text style={styles.headerSubtitle}>Balıkesir Üniversitesi</Text>
         </View>
-      </View>
+      </LinearGradient>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Section: Menu */}

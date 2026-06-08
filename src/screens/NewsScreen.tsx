@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   FlatList,
   Image,
   Pressable,
@@ -16,6 +15,9 @@ import { useAppTheme } from '../theme/ThemeContext';
 import ApiService, { HABERLER_URL, DUYURULAR_URL } from '../services/apiService';
 import { WebNewsItem } from '../types';
 import { sampleNews } from '../data/sampleData';
+import { commonStyles } from '../theme/commonStyles';
+import { styles } from '../styles/NewsScreen.styles';
+import { LinearGradient } from 'expo-linear-gradient';
 
 interface NewsScreenProps {
   navigation: any;
@@ -95,7 +97,7 @@ const NewsScreen: React.FC<NewsScreenProps> = ({ navigation }) => {
   };
 
   const renderNewsCard = ({ item }: { item: WebNewsItem }) => (
-    <Pressable style={[styles.card, { backgroundColor: colors.card }]} onPress={() => openItem(item)}>
+    <Pressable style={[commonStyles.card, { backgroundColor: colors.card }]} onPress={() => openItem(item)}>
       {item.imageUrl ? (
         <Image source={{ uri: item.imageUrl }} style={styles.cardImage} />
       ) : (
@@ -115,7 +117,7 @@ const NewsScreen: React.FC<NewsScreenProps> = ({ navigation }) => {
   );
 
   const renderAnnouncementCard = ({ item }: { item: WebNewsItem }) => (
-    <Pressable style={[styles.card, { backgroundColor: colors.card }]} onPress={() => openItem(item)}>
+    <Pressable style={[commonStyles.card, { backgroundColor: colors.card }]} onPress={() => openItem(item)}>
       <View style={styles.announcementRow}>
         <View style={[styles.announcementIconContainer, { backgroundColor: colors.chip }]}>
           <MaterialIcons name="campaign" size={24} color={colors.secondary} />
@@ -202,21 +204,26 @@ const NewsScreen: React.FC<NewsScreenProps> = ({ navigation }) => {
   );
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
+    <SafeAreaView style={[commonStyles.container, { backgroundColor: colors.background }]} edges={['top']}>
       {/* Header AppBar */}
-      <View style={[styles.appBar, { backgroundColor: colors.appbar }]}>
-        <View style={styles.appBarLeft}>
-          <Pressable style={styles.appBarIcon} onPress={() => navigation.openDrawer()}>
+      <LinearGradient
+        colors={colors.appbarGradient}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        style={commonStyles.appBar}
+      >
+        <View style={commonStyles.appBarLeft}>
+          <Pressable style={commonStyles.appBarIcon} onPress={() => navigation.openDrawer()}>
             <MaterialIcons name="menu" size={26} color="#FFFFFF" />
           </Pressable>
-          <Text style={styles.appBarTitle}>Haberler & Duyurular</Text>
+          <Text style={commonStyles.appBarTitle}>Haberler & Duyurular</Text>
         </View>
-      </View>
+      </LinearGradient>
 
       {renderHeader()}
 
       {loading ? (
-        <View style={styles.loadingContainer}>
+        <View style={commonStyles.loadingContainer}>
           <ActivityIndicator size="large" color={colors.primary} />
         </View>
       ) : (
@@ -235,138 +242,4 @@ const NewsScreen: React.FC<NewsScreenProps> = ({ navigation }) => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  appBar: {
-    height: 56,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 2.5,
-  },
-  appBarLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  appBarIcon: {
-    padding: 4,
-    marginRight: 12,
-  },
-  appBarTitle: {
-    color: '#FFFFFF',
-    fontSize: 19,
-    fontWeight: 'bold',
-  },
-  tabContainer: {
-    flexDirection: 'row',
-    height: 48,
-    backgroundColor: '#FFFFFF',
-    elevation: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 1,
-  },
-  tabButton: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  tabButtonText: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    marginLeft: 6,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  listContent: {
-    padding: 12,
-  },
-  card: {
-    borderRadius: 16,
-    marginVertical: 6,
-    overflow: 'hidden',
-    elevation: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 0.5 },
-    shadowOpacity: 0.1,
-    shadowRadius: 1,
-  },
-  cardImage: {
-    width: '100%',
-    height: 170,
-    resizeMode: 'cover',
-  },
-  cardImageFallback: {
-    width: '100%',
-    height: 170,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  cardContent: {
-    padding: 12,
-  },
-  cardDate: {
-    fontSize: 12,
-    marginBottom: 4,
-  },
-  cardTitle: {
-    fontSize: 15,
-    fontWeight: 'bold',
-    lineHeight: 20,
-  },
-  announcementRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 12,
-  },
-  announcementIconContainer: {
-    width: 46,
-    height: 46,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  announcementTextContainer: {
-    flex: 1,
-    marginLeft: 12,
-    marginRight: 6,
-  },
-  announcementTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    lineHeight: 18,
-  },
-  footerContainer: {
-    marginTop: 12,
-    marginBottom: 24,
-  },
-  outlinedButton: {
-    height: 46,
-    borderWidth: 1,
-    borderRadius: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonIcon: {
-    marginRight: 8,
-  },
-  outlinedButtonText: {
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-});
-
 export default NewsScreen;

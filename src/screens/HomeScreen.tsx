@@ -2,13 +2,11 @@ import React, { useEffect, useState, useRef } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   ScrollView,
   FlatList,
   Image,
   Pressable,
   ActivityIndicator,
-  Dimensions,
   NativeSyntheticEvent,
   NativeScrollEvent,
 } from 'react-native';
@@ -19,16 +17,18 @@ import ApiService from '../services/apiService';
 import { sampleNews, sampleEvents } from '../data/sampleData';
 import { WebNewsItem, ApiEvent } from '../types';
 import { LinearGradient } from 'expo-linear-gradient';
-
+import { commonStyles } from '../theme/commonStyles';
+import { styles, CAROUSEL_WIDTH } from '../styles/HomeScreen.styles';
+import { Dimensions } from 'react-native';
 const { width } = Dimensions.get('window');
-const CAROUSEL_WIDTH = width * 0.92;
+
 
 interface HomeScreenProps {
   navigation: any;
 }
 
 const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
-  const { theme } = useAppTheme();
+  const { theme, isDark } = useAppTheme();
   const { colors } = theme;
 
   const [news, setNews] = useState<WebNewsItem[]>([]);
@@ -166,19 +166,24 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   );
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
+    <SafeAreaView style={[commonStyles.container, { backgroundColor: colors.background }]} edges={['top']}>
       {/* AppBar */}
-      <View style={[styles.appBar, { backgroundColor: colors.appbar }]}>
-        <View style={styles.appBarLeft}>
-          <Pressable style={styles.appBarIcon} onPress={() => navigation.openDrawer()}>
+      <LinearGradient
+        colors={colors.appbarGradient}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        style={[commonStyles.appBar, { justifyContent: 'space-between' }]}
+      >
+        <View style={commonStyles.appBarLeft}>
+          <Pressable style={commonStyles.appBarIcon} onPress={() => navigation.openDrawer()}>
             <MaterialIcons name="menu" size={26} color="#FFFFFF" />
           </Pressable>
           <View style={styles.appBarLogoContainer}>
             <Image source={require('../../assets/logo.png')} style={styles.appBarLogo} />
           </View>
-          <Text style={styles.appBarTitle}>BAÜN Mobil</Text>
+          <Text style={commonStyles.appBarTitle}>BAÜN Mobil</Text>
         </View>
-      </View>
+      </LinearGradient>
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
         {/* Section: Featured News */}
@@ -203,7 +208,6 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
               decelerationRate="fast"
               onScroll={onScroll}
               scrollEventThrottle={16}
-              contentContainerStyle={{ paddingHorizontal: (width - CAROUSEL_WIDTH) / 2 }}
             />
             {/* Dots */}
             <View style={styles.dotsContainer}>
@@ -213,7 +217,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
                   style={[
                     styles.dot,
                     {
-                      backgroundColor: index === activeSlide ? colors.secondary : 'rgba(0,0,0,0.2)',
+                      backgroundColor: index === activeSlide ? colors.secondary : (isDark ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.15)'),
                       width: index === activeSlide ? 22 : 8,
                     },
                   ]}
@@ -310,208 +314,4 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  appBar: {
-    height: 56,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 2.5,
-  },
-  appBarLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  appBarIcon: {
-    padding: 4,
-    marginRight: 10,
-  },
-  appBarLogoContainer: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 2,
-    marginRight: 10,
-  },
-  appBarLogo: {
-    width: 32,
-    height: 32,
-    resizeMode: 'contain',
-  },
-  appBarTitle: {
-    color: '#FFFFFF',
-    fontSize: 19,
-    fontWeight: 'bold',
-  },
-  scrollContent: {
-    paddingTop: 8,
-  },
-  sectionHeader: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginLeft: 16,
-    marginTop: 16,
-    marginBottom: 10,
-  },
-  loadingContainer: {
-    height: 180,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  carouselItem: {
-    width: width,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  carouselCard: {
-    width: CAROUSEL_WIDTH,
-    height: 210,
-    borderRadius: 16,
-    overflow: 'hidden',
-    backgroundColor: '#000',
-    position: 'relative',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.2,
-  },
-  carouselImage: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-  },
-  carouselImageFallback: {
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  gradient: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: '60%',
-    justifyContent: 'flex-end',
-  },
-  carouselTextContainer: {
-    padding: 14,
-  },
-  dateBadge: {
-    alignSelf: 'flex-start',
-    borderRadius: 8,
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    marginBottom: 6,
-  },
-  dateBadgeText: {
-    color: '#FFFFFF',
-    fontSize: 11,
-    fontWeight: 'bold',
-  },
-  carouselTitle: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  dotsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  dot: {
-    height: 8,
-    borderRadius: 4,
-    marginHorizontal: 3,
-  },
-  shortcutsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 12,
-  },
-  shortcutCard: {
-    flex: 1,
-    marginHorizontal: 4,
-    paddingVertical: 14,
-    borderRadius: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 1.5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 1.5,
-  },
-  shortcutIconContainer: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 8,
-  },
-  shortcutText: {
-    fontSize: 12,
-    fontWeight: '600',
-    textAlign: 'center',
-    lineHeight: 15,
-  },
-  eventsHeaderRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingRight: 16,
-    marginTop: 16,
-    marginBottom: 10,
-  },
-  allLink: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    padding: 4,
-  },
-  eventCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginHorizontal: 16,
-    marginVertical: 5,
-    padding: 12,
-    borderRadius: 16,
-    elevation: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 0.5 },
-    shadowOpacity: 0.1,
-    shadowRadius: 1,
-  },
-  eventAvatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 12,
-  },
-  eventTextContainer: {
-    flex: 1,
-  },
-  eventTitle: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    lineHeight: 18,
-  },
-  eventSubtitle: {
-    fontSize: 12,
-    marginTop: 3,
-  },
-});
-
 export default HomeScreen;

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   ScrollView,
   Pressable,
   ActivityIndicator,
@@ -13,6 +12,8 @@ import { useAppTheme } from '../theme/ThemeContext';
 import ApiService from '../services/apiService';
 import { YemekHaftasi, YemekGunu } from '../types';
 import { sampleYemek } from '../data/sampleData';
+import { commonStyles } from '../theme/commonStyles';
+import { styles } from '../styles/YemekScreen.styles';
 
 const YemekScreen: React.FC = () => {
   const { theme, isDark } = useAppTheme();
@@ -104,7 +105,7 @@ const YemekScreen: React.FC = () => {
   );
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={[commonStyles.container, { backgroundColor: colors.background }]}>
       {loading ? (
         <View style={styles.centerContainer}>
           <ActivityIndicator size="large" color={colors.primary} />
@@ -146,128 +147,4 @@ const YemekScreen: React.FC = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  centerContainer: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 32,
-  },
-  scrollContent: {
-    padding: 12,
-  },
-  menuHeaderCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-    borderRadius: 16,
-    marginBottom: 10,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1.5 },
-    shadowOpacity: 0.18,
-    shadowRadius: 2,
-  },
-  menuHeaderTitle: {
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-    fontSize: 16,
-    marginLeft: 12,
-    flex: 1,
-  },
-  gunCard: {
-    borderRadius: 16,
-    marginVertical: 6,
-    padding: 14,
-    elevation: 1.5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 0.5 },
-    shadowOpacity: 0.1,
-    shadowRadius: 1.5,
-  },
-  cardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  avatar: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 10,
-  },
-  gunTitle: {
-    fontSize: 17,
-    fontWeight: 'bold',
-  },
-  cardDivider: {
-    height: 1,
-    marginVertical: 10,
-  },
-  ogunRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 4,
-    paddingHorizontal: 4,
-  },
-  ogunIcon: {
-    marginRight: 10,
-  },
-  ogunText: {
-    fontSize: 15,
-    flex: 1,
-  },
-  sourceText: {
-    color: 'grey',
-    fontSize: 12,
-    textAlign: 'center',
-    marginTop: 16,
-  },
-  errorTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  errorSubtitle: {
-    color: 'grey',
-    fontSize: 13,
-    textAlign: 'center',
-    marginBottom: 16,
-    lineHeight: 18,
-  },
-  button: {
-    height: 40,
-    borderRadius: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 16,
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-  offlineBanner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 12,
-    borderRadius: 12,
-    borderWidth: 1,
-    marginBottom: 12,
-  },
-  offlineBannerText: {
-    fontSize: 13,
-    fontWeight: '600',
-    flex: 1,
-    lineHeight: 18,
-  },
-});
-
 export default YemekScreen;

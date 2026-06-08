@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ActivityIndicator, Pressable } from 'react-native';
+import { View, ActivityIndicator, Pressable } from 'react-native';
 import { WebView } from 'react-native-webview';
 import * as Linking from 'expo-linking';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useAppTheme } from '../theme/ThemeContext';
+import { commonStyles } from '../theme/commonStyles';
+import { styles } from '../styles/CanliOtobusScreen.styles';
 
 const BUS_TRACK_URL = 'https://balikesirkart.asiselektronik.com.tr/wheremybus';
 
@@ -12,7 +14,7 @@ interface CanliOtobusScreenProps {
 }
 
 const CanliOtobusScreen: React.FC<CanliOtobusScreenProps> = ({ navigation }) => {
-  const { theme } = useAppTheme();
+  const { theme, isDark } = useAppTheme();
   const { colors } = theme;
   const [loading, setLoading] = useState(true);
 
@@ -34,41 +36,39 @@ const CanliOtobusScreen: React.FC<CanliOtobusScreenProps> = ({ navigation }) => 
     });
   }, [navigation, colors]);
 
+  const injectedJs = `
+    (function() {
+      setTimeout(function() {
+        try {
+          const css = 'html, body, app-root, router-outlet, app-wheremybus, app-layout { display: block !important; height: 100% !important; min-height: 100% !important; margin: 0 !important; padding: 0 !important; } .shell, .black-layer, .main-content, .container, .main-area, .map-viewer, .map { height: 100% !important; min-height: 100% !important; margin: 0 !important; padding: 0 !important; }';
+          const style = document.createElement('style');
+          style.type = 'text/css';
+          style.appendChild(document.createTextNode(css));
+          document.head.appendChild(style);
+        } catch (e) {
+          console.error(e);
+        }
+      }, 1000);
+    })();
+    true;
+  `;
+
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={[commonStyles.container, { backgroundColor: colors.background }]}>
       <WebView
         source={{ uri: BUS_TRACK_URL }}
         onLoadEnd={() => setLoading(false)}
         style={styles.webView}
         javaScriptEnabled={true}
         domStorageEnabled={true}
+        injectedJavaScript={injectedJs}
       />
       {loading && (
-        <View style={styles.loadingContainer}>
+        <View style={[styles.loadingContainer, { backgroundColor: isDark ? 'rgba(10, 17, 16, 0.8)' : 'rgba(255, 255, 255, 0.8)' }]}>
           <ActivityIndicator size="large" color={colors.primary} />
         </View>
       )}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  webView: {
-    flex: 1,
-  },
-  loadingContainer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
-  },
-});
-
 export default CanliOtobusScreen;
